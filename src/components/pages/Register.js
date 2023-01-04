@@ -1,7 +1,8 @@
 import { useRef, useState, useEffect } from "react";
 import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import axios from '../api/axios';
+import axios from '../../api/axios';
+import { Link } from "react-router-dom";
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const EMAIL_REGEX = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
@@ -87,12 +88,14 @@ const Register = () => {
                 setErrorMsg('No Server Response');
             } else if (error.response?.status === 409) {
                 setErrorMsg('Username Taken');
-            } else {
+            } else if (error.response?.status === 400) {
+                setErrorMsg('Invalid e-mail');
+            }else {
                 setErrorMsg('Registration Failed')
             }
             errorRef.current.focus();
         }
-    } //lineas para usar con axios(58 a 85)
+    } 
 
     return (
         <>
@@ -100,7 +103,7 @@ const Register = () => {
                 <section>
                     <h1>Success!</h1>
                     <p>
-                        <a href="#">Sign In</a>
+                        <Link to="/login">Sign In</Link>
                     </p>
                 </section>
             ) : (
@@ -207,8 +210,7 @@ const Register = () => {
                     <p>
                         Already registered?<br />
                         <span className="line">
-                            {/*put router link here*/}
-                            <a href="#">Sign In</a>
+                            <Link to="/">Sign In</Link>
                         </span>
                     </p>
                 </section>
